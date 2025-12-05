@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photobook — DAWNING</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reuse main site styles (trimmed) */
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#111; color:#eee; }
+    header { background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url("../images/american-flag.jpg") center/cover no-repeat; background-size:cover; padding:20px 0; text-align:center; color:#fff; border-bottom:4px solid #000; }
+    .navbar { background:transparent; padding:8px 0; }
+    .navbar a { margin:0 15px; color:#fff; text-decoration:none; font-weight:bold; padding:8px 12px; display:inline-block; }
+    main { padding:40px; }
+    h1,h2 { color:#d4a017; margin:0 0 20px 0; }
+    .photo-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:16px; }
+    .photo-grid img { width:100%; height:160px; object-fit:cover; border-radius:6px; display:block; cursor:pointer; }
+    .back-link { display:inline-block; margin-top:20px; color:#0af; text-decoration:none; }
+    footer.social-footer { background:#222; padding:30px 20px; text-align:center; border-top:2px solid #d4a017; }
+
+    /* Lightbox styles */
+    .lightbox {
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.9); z-index:9999;
+    }
+    .lightbox.visible { display:flex; }
+    .lightbox img { max-width:90%; max-height:82%; border-radius:6px; box-shadow:0 8px 24px rgba(0,0,0,0.6); }
+    .lightbox .caption { color:#ddd; margin-top:12px; text-align:center; }
+    .lightbox .close, .lightbox .prev, .lightbox .next {
+      position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:2rem; background:transparent; border:none; cursor:pointer; padding:8px 12px; opacity:0.9;
+    }
+    .lightbox .close { top:18px; right:22px; transform:none; font-size:1.6rem; }
+    .lightbox .prev { left:22px; }
+    .lightbox .next { right:22px; }
+    @media (max-width:600px) { .lightbox .prev, .lightbox .next { font-size:1.6rem; left:8px; right:8px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>DAWNING</h1>
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="index.html#music">Music</a>
+      <a href="index.html#tour">Tour</a>
+      <a href="photobook.html">Photobook</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Photobook</h2>
+    <p>Here's a selection of images. Click any image to open the file directly.</p>
+
+    <div class="photo-grid">
+      <!-- Primary images -->
+      <a href="../images/Final_Cleopatra_Cover.JPEG"><img data-src="../images/Final_Cleopatra_Cover.JPEG" src="../images/Final_Cleopatra_Cover.JPEG" alt="Cleopatra cover"></a>
+      <a href="../images/american-flag.jpg"><img data-src="../images/american-flag.jpg" src="../images/american-flag.jpg" alt="American flag"></a>
+      <a href="../images/Website banner.jpg"><img data-src="../images/Website banner.jpg" src="../images/Website banner.jpg" alt="Website banner"></a>
+
+      <!-- Placeholder / additional slots (duplicate and replace src with your images) -->
+      <a href="../images/Final_Cleopatra_Cover.JPEG"><img data-src="../images/Final_Cleopatra_Cover.JPEG" src="../images/Final_Cleopatra_Cover.JPEG" alt="placeholder 1"></a>
+      <a href="../images/american-flag.jpg"><img data-src="../images/american-flag.jpg" src="../images/american-flag.jpg" alt="placeholder 2"></a>
+      <a href="../images/Final_Cleopatra_Cover.JPEG"><img data-src="../images/Final_Cleopatra_Cover.JPEG" src="../images/Final_Cleopatra_Cover.JPEG" alt="placeholder 3"></a>
+      <a href="../images/american-flag.jpg"><img data-src="../images/american-flag.jpg" src="../images/american-flag.jpg" alt="placeholder 4"></a>
+      <a href="../images/Website banner.jpg"><img data-src="../images/Website banner.jpg" src="../images/Website banner.jpg" alt="placeholder 5"></a>
+    </div>
+
+    <!-- Lightbox markup -->
+    <div class="lightbox" id="lightbox">
+      <button class="close" id="lb-close" aria-label="Close">✕</button>
+      <button class="prev" id="lb-prev" aria-label="Previous">◀</button>
+      <div class="lb-content">
+        <img id="lb-image" src="" alt="">
+        <div class="caption" id="lb-caption"></div>
+      </div>
+      <button class="next" id="lb-next" aria-label="Next">▶</button>
+    </div>
+
+    <a class="back-link" href="index.html">← Back to home</a>
+  </main>
+
+  <footer class="social-footer">
+    <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+    <a href="https://www.instagram.com/ohmydawning/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://www.youtube.com/@ohmydawning" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="https://spotify.com" target="_blank" title="Spotify"><i class="fab fa-spotify"></i></a>
+    <p>&copy; 2025 DAWNING. All rights reserved.</p>
+  </footer>
+  <script>
+    (function(){
+      const links = Array.from(document.querySelectorAll('.photo-grid a'));
+      const lightbox = document.getElementById('lightbox');
+      const lbImage = document.getElementById('lb-image');
+      const lbCaption = document.getElementById('lb-caption');
+      const closeBtn = document.getElementById('lb-close');
+      const prevBtn = document.getElementById('lb-prev');
+      const nextBtn = document.getElementById('lb-next');
+      let current = 0;
+
+      function show(index){
+        const a = links[index];
+        const img = a.querySelector('img');
+        const src = a.getAttribute('href') || img.getAttribute('data-src') || img.src;
+        lbImage.src = src;
+        lbCaption.textContent = img.alt || '';
+        lightbox.classList.add('visible');
+        current = index;
+      }
+
+      function hide(){ lightbox.classList.remove('visible'); lbImage.src=''; }
+
+      links.forEach((a, i)=>{
+        a.addEventListener('click', function(e){ e.preventDefault(); show(i); });
+      });
+
+      closeBtn.addEventListener('click', hide);
+      lightbox.addEventListener('click', function(e){ if(e.target === lightbox) hide(); });
+      prevBtn.addEventListener('click', function(e){ e.stopPropagation(); show((current-1+links.length)%links.length); });
+      nextBtn.addEventListener('click', function(e){ e.stopPropagation(); show((current+1)%links.length); });
+
+      document.addEventListener('keydown', function(e){
+        if(!lightbox.classList.contains('visible')) return;
+        if(e.key === 'Escape') hide();
+        if(e.key === 'ArrowLeft') show((current-1+links.length)%links.length);
+        if(e.key === 'ArrowRight') show((current+1)%links.length);
+      });
+    })();
+  </script>
+</body>
+</html>
